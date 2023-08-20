@@ -39,7 +39,7 @@ This is a simple Python port scanner that allows you to check open ports on a gi
     python portscanner.py -ip 192.168.0.1 -min 1 -max 1000
     python portscanner.py -ip 192.168.0.1 -ip 192.168.0.2 -p 80 -p 443
 
-##Command-line Arguments
+## Command-line Arguments
 -ip: IP address(es) to be scanned.
 -min: Start port for scanning (default: 1).
 -max: End port for scanning (default: 10,000).
