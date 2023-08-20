@@ -10,9 +10,6 @@ This is a simple Python port scanner that allows you to check open ports on a gi
   - [Installation](#installation)
 - [Usage](#usage)
 - [Command-line Arguments](#command-line-arguments)
-- [Examples](#examples)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
