@@ -33,21 +33,25 @@ def port_scan(ip,ports):
 
 def ip_checker(arg):
     splited_ip = arg.split('.')
-    if len(splited_ip)==4 and '' not in splited_ip:
-        beggining = splited_ip[0] == '192' and splited_ip[1] == '168'
-        ip_ranges = False if int(splited_ip[2]) > 255 \
-            or int(splited_ip[2]) < 0 \
-            or int(splited_ip[3]) > 255 \
-            or int(splited_ip[3]) < 0 \
-            else True
-    else:
-        print('Thats not correct ip address')
+    
+    if len(splited_ip) != 4:
+        print('Invalid IP address: The IP address should consist of four parts.')
+        return False
+    
+    if any(part == '' for part in splited_ip):
+        print('Invalid IP address: Each part of the IP address should be non-empty.')
         return False
 
-    if all([beggining,ip_ranges]):
+    if not all(part.isdigit() and 0 <= int(part) <= 255 for part in splited_ip):
+        print('Invalid IP address: Each part of the IP address should be a number between 0 and 255.')
+        return False
+
+    if splited_ip[0] == '192' and splited_ip[1] == '168':
         return arg
-    
-    raise argparse.ArgumentTypeError(f'Invalid IP address {arg}')
+    else:
+        print('Invalid IP address: Only IP addresses from the local network (192.168.x.x) are allowed.')
+        return False
+
 
 def main():
     try:
