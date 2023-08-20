@@ -2,36 +2,43 @@ import argparse
 import socket
 import threading
 
+# Custom exceptions for better error handling
 class NoIpToScan(Exception):
+    """Exception raised when no IP address is provided for scanning."""
     pass
 
 class RangeError(Exception):
+    """Exception raised for invalid port range."""
     pass
 
 class AlreadySpecified(Exception):
+    """Exception raised when ports are specified more than once."""
     pass
 
 class Scanner():
     def __init__(self) -> None:
         self.socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def scan_ports(self, ips,port):
+    def scan_ports(self, ips, port):
+        """Scan ports on the provided IP addresses using threading."""
         for ip in ips:
-            result = self.socket_obj.connect_ex((ip,port))
-            if result ==0:
+            result = self.socket_obj.connect_ex((ip, port))
+            if result == 0:
                 print(f'{ip}:Port {port} is open')
-    
-def port_scan(ip,ports):
+
+def port_scan(ips, ports):
+    """Scan ports using multiple threads."""
     threads = []
     for port in ports:
         scanner = Scanner()
-        thread = threading.Thread(target=scanner.scan_ports,args=(ip,port))
+        thread = threading.Thread(target=scanner.scan_ports, args=(ips, port))
         thread.start()
         threads.append(thread)
     for t in threads:
         t.join()
 
 def ip_checker(arg):
+    """Validate and filter local IP addresses."""
     splited_ip = arg.split('.')
     
     if len(splited_ip) != 4:
@@ -52,15 +59,15 @@ def ip_checker(arg):
         print('Invalid IP address: Only IP addresses from the local network (192.168.x.x) are allowed.')
         return False
 
-
 def main():
     try:
+        # Command-line argument parsing
         parser = argparse.ArgumentParser(
             prog='PortScanner',
             description='This program checks open ports',
             usage='\npython portscanner.py -ip 192.168.0.10 -min 22 -max 1000 \n \n'
         )
-
+        # Adding command-line arguments
         parser.add_argument(
             '-ip',
             type=ip_checker,
@@ -91,25 +98,27 @@ def main():
             help='Declare ports by yourself'
         )
         args = parser.parse_args()
+        
         if not args.ip:
             raise NoIpToScan('You didn\'t enter an IP to scan')
+        
         if args.min and args.max:
             if args.min >= args.max:
                 raise RangeError('Wrong usage of argument')
             if args.port:
                 raise AlreadySpecified('You already specified range of ports')
             ports_to_scan = range(args.min, args.max + 1)
-            port_scan(args.ip,ports_to_scan)
+            port_scan(args.ip, ports_to_scan)
         elif args.port:
-            port_scan(args.ip,args.port)
+            port_scan(args.ip, args.port)
         else:
             ports_to_scan = range(1, 10000 + 1)
-            port_scan(args.ip,ports_to_scan)
+            port_scan(args.ip, ports_to_scan)
     except (AlreadySpecified, RangeError, NoIpToScan) as e:
         print(e)
     except AttributeError as atr:
         print(atr)
-    except KeyboardInterrupt :
+    except KeyboardInterrupt:
         print('Program has been interrupted by user')
 
 if __name__ == '__main__':
