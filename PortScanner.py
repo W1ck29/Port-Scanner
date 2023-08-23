@@ -20,7 +20,6 @@ class Scanner():
         self.socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def scan_ports(self, ips, port):
-        """Scan ports on the provided IP addresses using threading."""
         for ip in ips:
             result = self.socket_obj.connect_ex((ip, port))
             if result == 0:
