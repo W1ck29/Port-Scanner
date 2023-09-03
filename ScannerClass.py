@@ -1,5 +1,6 @@
 import socket
 class Scanner():
+    '''Class for ip scanner'''
     def __init__(self) -> None:
         self.socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
