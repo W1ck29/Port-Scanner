@@ -1,29 +1,8 @@
 import argparse
-import socket
 import threading
+from ScannerClass import Scanner
+from exceptions import NoIpToScan ,RangeError,AlreadySpecified
 
-# Custom exceptions for better error handling
-class NoIpToScan(Exception):
-    """Exception raised when no IP address is provided for scanning."""
-    pass
-
-class RangeError(Exception):
-    """Exception raised for invalid port range."""
-    pass
-
-class AlreadySpecified(Exception):
-    """Exception raised when ports are specified more than once."""
-    pass
-
-class Scanner():
-    def __init__(self) -> None:
-        self.socket_obj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    def scan_ports(self, ips, port):
-        for ip in ips:
-            result = self.socket_obj.connect_ex((ip, port))
-            if result == 0:
-                print(f'{ip}:Port {port} is open')
 
 def port_scan(ips, ports):
     """Scan ports using multiple threads."""
