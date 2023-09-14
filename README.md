@@ -27,7 +27,7 @@ This is a simple Python port scanner that allows you to check open ports on a gi
 
 ### Installation
 
-- git clone https://github.com/yourusername/port-scanner.git
+- git clone https://github.com/W1ck29/Port-Scanner.git
 - cd port-scanner
 - pip install -r requirements.txt
 
